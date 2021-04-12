@@ -1,42 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import routes from '../routes';
+import "antd/dist/antd.css";
+import { useSelector } from "react-redux";
 
-const postUrl = "https://jsonplaceholder.typicode.com/posts";
+import routes from "../routes";
+import Homes from "./Homes";
+import Login from "./Login";
+import ErrorPage from "./ErrorPage";
+import Container from "../styles";
+
 function App() {
-  //  const homes = async (data) => {
-  //     return await fetch('http://test-alpha.reestrdoma.ru/api/reestrdoma/companies/',{
-  //       method:"GET",
-  //       headers:{
-  //         "Authorization":"Bearer "+token
-  //       }
-  //     }).then((res) => res.json()).then(res => console.log(res)).catch(err => console.log(err));
-  //  }
+  let logined = useSelector((state) => state.auth.logined);
+  console.log(logined, "logiiiiiinnnnn apppp");
 
-  //  useEffect(() => {
-  //    login({
-  //      username:"superuser@mail.ru",
-  //      password:"11111111"
-  //    });
-  //  }, []);
   return (
-    <div className="App">
+    <Container className="App">
+      {logined && localStorage.token ? (
         <BrowserRouter>
           <Switch>
-              {
-                routes.map(item => (
-                  <Route
-                    key={item.title}
-                    path={item.path}
-                    exact={item.exact}
-                    component={item.component}
-                    render={item.render}
-                  />
-                ))
-              }
+            <Route key='homes' path="/homes" exact component={Homes} />
+            {/* <Route key='error' path="/error" exact={true} component={ErrorPage} /> */}
+            <Redirect to="/homes" />
           </Switch>
         </BrowserRouter>
-    </div>
+      ) : (
+        <BrowserRouter>
+          <Switch>
+            <Route key="login" path={["/login"]} exact component={Login} />
+            {/* <Route key="login" path={"*"} exact component={Login} /> */}
+            <Redirect to="/login" />
+          </Switch>
+        </BrowserRouter>
+      )}
+    </Container>
   );
 }
 

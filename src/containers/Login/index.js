@@ -1,40 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input } from "antd";
-import S from '../../styles/Login';
+import {useDispatch} from 'react-redux'
+
+import axios from "../../utils/axios";
+import S from "../../styles/Login";
+import {login} from '../../store/auth/actions'
 
 function Login(props) {
-  const [access, setAccess] = useState(false);
-  const url = "http://test-alpha.reestrdoma.ru/api/login/";
 
-  useEffect(() => {
-    if (access) {
-      props.history.replace("/homes");
-    }
-  }, [access]);
+  const [error, setError] = useState(false);
 
-  const getAccess = async (url, body) => {
-    try {
-      let res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (res.status === 200) {
-        setAccess(true);
-        let {data} = await res.json();
-        console.log(data);
-        localStorage.setItem('token',data.token.access)
-        return data;
-      } else {
-        setAccess(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  const dispatch = useDispatch();
+
+  const getAccess = (data) => {
+    const url = "/login/";
+
+    axios
+      .post(url, data)
+      .then(({ data }) => {
+        dispatch(login(data.data.user,data.data.token.access));
+        localStorage.setItem("token", data.data.token.access);
+      })
+      .then(() => {
+        props.history.replace("/homes");
+      })
+      .catch(() => setError(true));
   };
 
-  const formHandler = async (values) => {
-     getAccess(url, values);
+  const formHandler = (values) => {
+    getAccess(values);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -42,27 +36,34 @@ function Login(props) {
   };
 
   return (
-    <S.login>
-      <Form onFinish={formHandler} name="basic" onFinishFailed={onFinishFailed}>
-        <Form.Item
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+    <S.Login>
+      <h1>Sign in</h1>
+        <Form
+          className="form"
+          onFinish={formHandler}
+          name="basic"
+          onFinishFailed={onFinishFailed}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Username"
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password />
-        </Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form>
-    </S.login>
+          <label className="form__title">Email address</label>
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: "Please input your username!" }]}
+          >
+            <Input className="form__input" placeholder="Enter your email" />
+          </Form.Item>
+          <label className="form__title">Password</label>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please input your password!" }]}
+          >
+            <Input.Password className="form__input" placeholder="Enter your password" />
+          </Form.Item>
+          <p className={`form__err-message ${error?'form__err-message--active':''}`}>Incorrect username or password.</p>
+          <Button className="form__btn" type="primary" htmlType="submit">
+            Sign in
+          </Button>
+        </Form>
+    </S.Login>
   );
 }
 
