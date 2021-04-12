@@ -4,8 +4,8 @@ import "antd/dist/antd.css";
 import { useSelector } from "react-redux";
 
 import routes from "../routes";
-import Homes from "./Homes";
-import Login from "./Login";
+import Homes from "./Homes/index";
+import Login from "./Login/index";
 import ErrorPage from "./ErrorPage";
 import Container from "../styles";
 
@@ -26,7 +26,7 @@ function App() {
       ) : (
         <BrowserRouter>
           <Switch>
-            <Route key="login" path={["/login"]} exact component={Login} />
+            <Route key="login" path={"/login"} exact component={Login} />
             {/* <Route key="login" path={"*"} exact component={Login} /> */}
             <Redirect to="/login" />
           </Switch>
