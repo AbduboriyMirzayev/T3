@@ -3,7 +3,7 @@ import * as types from "./actionTypes";
 const initialState = {
   token: null,
   user: {},
-  logined:false,
+  logedin:false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -13,7 +13,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         user: action.payload,
         token: action.token,
-        logined:true
+        logedin:true
+      };
+    case types.LOG_OUT_SUCCESS:
+      return {
+        logedin:false
       };
     default: {
       return state;

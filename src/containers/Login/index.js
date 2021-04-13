@@ -22,7 +22,7 @@ function Login(props) {
         localStorage.setItem("token", data.data.token.access);
       })
       .then(() => {
-        props.history.replace("/homes");
+        props.history.replace("/home");
       })
       .catch(() => setError(true));
   };

@@ -5,8 +5,15 @@ const login = (data,token) => {
         type:types.SIGN_IN_SUCCESS,
         payload:data,
         token:token,
-        logined:true
+        logedin:true
     }
 }
 
-export {login};
+const logout = () => {
+    return {
+        type:types.LOG_OUT_SUCCESS,
+        logedin:false
+    }
+}
+
+export {login,logout};

@@ -3,15 +3,16 @@ import styled from "styled-components";
 const S = {};
 
 S.Login = styled.div`
+    max-width: 300px;
+    width:100%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction:column;
-    height:100vh;
+    height:100%;
 
   .form {
     width: 100%;
-    max-width: 300px;
   }
 
   .form__input{

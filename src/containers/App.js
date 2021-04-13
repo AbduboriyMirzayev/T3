@@ -3,31 +3,26 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import "antd/dist/antd.css";
 import { useSelector } from "react-redux";
 
-import routes from "../routes";
-import Homes from "./Homes";
+import Home from "./Home";
 import Login from "./Login";
-import ErrorPage from "./ErrorPage";
 import Container from "../styles";
 
 function App() {
-  let logined = useSelector((state) => state.auth.logined);
-  console.log(logined, "logiiiiiinnnnn apppp");
-
+  let logedin = useSelector((state) => state.auth.logedin);
+  let token = useSelector((state) => state.auth.token);
   return (
     <Container className="App">
-      {logined && localStorage.token ? (
+      {logedin && token ? (
         <BrowserRouter>
           <Switch>
-            <Route key='homes' path="/homes" exact component={Homes} />
-            {/* <Route key='error' path="/error" exact={true} component={ErrorPage} /> */}
-            <Redirect to="/homes" />
+            <Route key='home' path="/home" exact component={Home} />
+            <Redirect to="/home" />
           </Switch>
         </BrowserRouter>
       ) : (
         <BrowserRouter>
           <Switch>
-            <Route key="login" path={["/login"]} exact component={Login} />
-            {/* <Route key="login" path={"*"} exact component={Login} /> */}
+            <Route key="login" path="/login" exact component={Login} />
             <Redirect to="/login" />
           </Switch>
         </BrowserRouter>
