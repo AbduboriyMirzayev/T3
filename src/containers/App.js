@@ -11,7 +11,7 @@ function App() {
   let logedin = useSelector((state) => state.auth.logedin);
   let token = useSelector((state) => state.auth.token);
   return (
-    <Container className="App">
+    <Container className="App"> 
       {logedin && token ? (
         <BrowserRouter>
           <Switch>
